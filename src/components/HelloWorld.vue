@@ -3,14 +3,18 @@ import { ref } from "vue";
 
 defineProps<{ msg: string }>();
 
-const count = ref(0)
+const count = ref(0);
+
+const add = (): void => {
+  count.value += 1;
+};
 </script>
 
 <template>
   <h1>{{ msg }}</h1>
   <button type="button" @click="add">count is: {{ count }}</button>
 </template>
-
+g
 <style scoped>
 a {
   color: #42b983;
