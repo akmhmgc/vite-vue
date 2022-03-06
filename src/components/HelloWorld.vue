@@ -1,18 +1,34 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onMounted, onUpdated } from "vue";
+import axios from "axios";
 
 defineProps<{ msg: string }>();
 
 const count = ref(0);
+const msg = ref("");
+const address = ref("");
+const postcode = ref("");
 
 const add = (): void => {
   count.value += 1;
 };
+
+onUpdated(async () => {
+  const zipcode = postcode.value;
+  if (zipcode.length !== 7) return;
+
+  await axios
+    .get(`https://zipcloud.ibsnet.co.jp/api/search?zipcode=${zipcode}`)
+    .then((response) => {
+      address.value = response.data.results[0].address3;
+    });
+});
 </script>
 
 <template>
-  <h1>{{ msg }}</h1>
-  <button type="button" @click="add">count is: {{ count }}</button>
+  <button type="button" @click="add" id="count">count is: {{ count }}</button>
+  <input v-model="postcode" id="textBox" />
+  <p>住所: {{ address }}</p>
 </template>
 g
 <style scoped>
